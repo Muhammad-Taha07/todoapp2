@@ -25,5 +25,23 @@ class TaskController extends Controller
         ]);
         return redirect('/');
     }
+
+    //updating function for editing & updating task
+    public function update($id)
+    {
+        $task = Task::where('id', $id)->first();
+        $task->completed_at = now();
+        $task->save();
+        // return dd($task); die dump to check if we're receiving data in array
+        return redirect('/');
+    }
+
+    public function delete($id)
+    {
+        // $task = Task::find($id)->dele;
+        $task = Task::where('id', $id)->first();
+        $task->delete();
+        return redirect('/');
+    }
 }
-//vid https://www.youtube.com/watch?v=4aZwPSUmL5Y&list=PL6p51-RwMZPFbg-52prn13uj7FwhZ2cPx&index=5
+
