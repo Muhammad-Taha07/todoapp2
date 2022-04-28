@@ -13,6 +13,7 @@ class Task extends Model
         'description',
     ];
 
+    //function for database change state complete
     public function isCompleted()
     {
         return $this->completed_at !== null;

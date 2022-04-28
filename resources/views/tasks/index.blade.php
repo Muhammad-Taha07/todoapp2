@@ -1,7 +1,8 @@
     @extends('layouts.app')
     @section('content')
 
-    <h1 style="margin-top: 30px;">Task List</h1>
+    <h1 style="margin-top: 30px;">To Do List Application</h1>
+    <h3 style="margin-top: 20px; color: green;">Your Task(s)</h1>
     <a href="/tasks/create" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 20px;">Add a new Task</a>
 
     @foreach($tasks as $task)
