@@ -12,6 +12,7 @@ class TaskController extends Controller
         $tasks = Task::all();
         return view('tasks.index', ['tasks' => $tasks,]);
     }
+
     public function create()
     {
         return view('tasks.create');
@@ -35,7 +36,7 @@ class TaskController extends Controller
         // return dd($task); die dump to check if we're receiving data in array
         return redirect('/');
     }
-
+    //Deleting function for
     public function delete($id)
     {
         // $task = Task::find($id)->dele;

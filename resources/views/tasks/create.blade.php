@@ -6,11 +6,11 @@
         @csrf
         <div class="form-group">
             <label for="description">Task Description</label>
-            <input class="form-control" name="description"/>
+            <input class="form-control" name="description" required/>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Create Task</button>
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Create Task</button>
         </div>
     </form>
     @endsection
