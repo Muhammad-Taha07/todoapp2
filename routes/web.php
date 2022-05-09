@@ -20,10 +20,10 @@ Route::get('/','TaskController@index');
 Route::get('/tasks/create', 'TaskController@create');
 
 //Routing for adding a task
-Route::post('/tasks','TaskController@store');
+Route::post('/tasks','TaskController@store')->name('createTasks');
 
 //Routing for Updating data via Patching
 Route::patch('/tasks/{id}', 'TaskController@update');
 
 //Routing for Deleting a task from index
-Route::DELETE('/tasks/{id}', 'TaskController@delete');
+Route::DELETE('/tasks/{id}', 'TaskController@delete')->name('taskDel');

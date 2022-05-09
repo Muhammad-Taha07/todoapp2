@@ -17,3 +17,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Router for Homepage / Task Listing
+Route::get('/task','TaskController@allTasks');
+
+Route::post('/task','TaskController@storeData');
+
+//For Storing data in database
+// Route::post('/task/','TaskController@storeData');
+
+// Route::post('/task','TaskController@storeData');
+
+// Route::get('/task/{id}','TaskController@storeData');
+
+// Route::get('/tasks','TaskController@storeData');
+
+
