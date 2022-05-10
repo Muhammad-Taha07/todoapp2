@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-
+    <br>
     <h1 style="text-decoration-style: solid">Add a New Task</h1>
     <ul style=“list-style-type:circle">
         <li style="text">This section is to load a new Task into the Application.</li></ul>

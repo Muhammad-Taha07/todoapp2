@@ -53,13 +53,13 @@
                             style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
                             {{ $task->description }}</td>
                         <td>
-                            <div id="divbtn">
+                            <nav id="side-nav">
                             <form action="/tasks/{{ $task->id }}" method="POST">
                                 @method('PATCH')
                                 @csrf
                                 <button class="btn btn-dark" id="taskBtn1" input="submit">Mark As Completed</button>
                             </form>
-                            </div>
+                        </nav>
                         </td>
                         <td>
                             <form action="/tasks/{{ $task->id }}" method="POST">
@@ -73,7 +73,9 @@
                 @endforeach
             </tbody>
         </table>
+
         {{-- Creating / Adding a task --}}
+
         <script>
             $('.markComplete').on('click', function(e) {
                 e.preventDefault();
@@ -107,7 +109,7 @@
                     //   }
                 });
             });
-            
+
             //For hiding the button on Click
 
             // $(document).ready(function() {
@@ -117,6 +119,14 @@
             // });
 
             // });
+
+            $(document).ready(function(){
+                $('#taskBtn1').click(function(){
+                    $('#side-nav').hide();
+            });
+                });
+                //needs to Work here exactly.. (REQUIRED: Should mark TASK AS COMPLETED AT FRONTEND)
+            // })
         </script>
     @endsection
 
