@@ -40,6 +40,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col" style="width: 66%">Description</th>
+                    <th scope="col" style="width: 10%">Status</th>
                     <th scope="col">Actions</th>
                     <th scope="col">Delete Panel</th>
                 </tr>
@@ -47,27 +48,19 @@
             <tbody id="taskTable">
                 @foreach ($tasks as $task)
                     {{-- Completing task is being marked --}}
-                    <tr>
+                    <tr id="tblRow-{{$task->id}}">
                         <th scope="row">{{ $task->id }}</th>
-                        <td id='{{ $task->id }}-description'
+                        <td id='description-{{ $task->id }}'
                             style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
-                            {{ $task->description }}</td>
-                        <td>
-                            <nav id="side-nav">
-                            <form action="/tasks/{{ $task->id }}" method="POST">
-                                @method('PATCH')
-                                @csrf
-                                <button class="btn btn-dark" id="taskBtn1" input="submit">Mark As Completed</button>
-                            </form>
-                        </nav>
+                            {{ $task->description }}
                         </td>
+                        <td id="status-{{$task->id}}">
+                            {{-- Status Change --}}
+                            <span class="badge {{$task->completed_at ? 'badge-success' : 'badge-danger'}}">{{$task->completed_at ? 'Completed' : 'Not Completed'}}</span>
+                        </td>
+                        <td><button class="btn btn-dark markBtn" id="{{$task->id}}">Mark As Completed</button></td>
                         <td>
-                            <form action="/tasks/{{ $task->id }}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn btn-danger" input="submit" style="color: rgb(254, 254, 254);">Delete
-                                    Task</button>
-                            </form>
+                                <button class="btn btn-danger delBtn" id="{{$task->id}}" style="color: rgb(254, 254, 254);">DeleteTask</button>
                         </td>
                     </tr>
                 @endforeach
@@ -75,14 +68,43 @@
         </table>
 
         {{-- Creating / Adding a task --}}
+    <script>
+        $(function () {
 
-        <script>
             $('.markComplete').on('click', function(e) {
                 e.preventDefault();
                 console.log("Asdasdasd");
                 $(this).parent().prev().css('text-decoration', 'line-through')
             });
 
+            //status change with MARK COMPLETE Button
+            $('.markBtn').on('click', function(e) {
+               var id = $(this).attr('id');
+            $.ajax({
+                url: "/tasks/"+id,
+                dataType:"json",
+                success: function(response) {
+                    console.log(response)
+                    var status = response.completed_at ? '<span class="badge badge-success">Completed</span>' : '<span class="badge badge-danger">Not Completed</span>';
+                    $('#status-'+id).html(status);
+                    $('#description-'+id).css('text-decoration', response.completed_at ? 'line-through' : 'none');
+                }
+            });
+            });
+
+            //DEL BUTTON
+            $('.delBtn').on('click', function(e) {
+               var id = $(this).attr('id');
+               console.log(id)
+            $.ajax({
+                url: "/tasks-delete/"+id,
+                dataType:"json",
+                success: function(response) {
+                    console.log(response)
+                    $('#tblRow-'+id).hide();
+                }
+            });
+            });
             $('#taskForm').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -93,41 +115,23 @@
                         var tableRow = '<tr>' +
                             '<th scope="row">' + response.id + '</th>' +
                             '<td>' + response.description + '</td>' +
-                            '<td><form action="/tasks/' + response.id +
-                            '" method="POST"><input type="hidden" name="_method" value="PATCH">{{ csrf_field() }}<button class="btn btn-dark" type="submit">Mark As Completed</button></form></td>' +
+                            '<td>' +
+                            '<span class="badge badge-danger">Not Completed</span>'+
+                           '</td>'+
+                            '<td>'+
+                            '<button class="btn btn-dark markBtn" id='+response.id+'>Mark As Completed</button>'+
+                            '</td>'+
                             '<td><form action="/tasks/' + response.id +
                             '" method="POST"><input type="hidden" name="_method" value="DELETE">{{ csrf_field() }}<button class="btn btn-danger" type="submit">Delete Task</button></form></td>' +
                             '</tr>';
-
-                        console.log(tableRow);
                         $("#taskTable").append(tableRow);
                         $('#taskModal').modal('hide');
                         $('#description').val('');
                     }
-                    //   error: function(error){
-                    //     alert('Error');
-                    //   }
                 });
             });
-
-            //For hiding the button on Click
-
-            // $(document).ready(function() {
-            // $("#taskBtn1").click(function() {
-            // $("#divbtn").hide();
-            // // e.preventDefault(e);
-            // });
-
-            // });
-
-            $(document).ready(function(){
-                $('#taskBtn1').click(function(){
-                    $('#side-nav').hide();
-            });
-                });
-                //needs to Work here exactly.. (REQUIRED: Should mark TASK AS COMPLETED AT FRONTEND)
-            // })
-        </script>
+        });
+    </script>
     @endsection
 
     {{-- CARD VIEW FOR THE ABOVE WORK --}}

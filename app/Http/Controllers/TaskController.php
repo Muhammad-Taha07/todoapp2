@@ -88,19 +88,24 @@ class TaskController extends Controller
     public function update($id)
     {
         $task = Task::where('id', $id)->first();
-        $task->completed_at = now();
+        if($task->completed_at)
+        {
+            $task->completed_at = null;
+        }
+        else{
+            $task->completed_at = now();
+        }
         $task->save();
-        // return dd($task); die dump to check if we're receiving data in array
-        return redirect('/');
+        return $task;
+
     }
 
     //Deleting function for
     public function delete($id)
     {
-
-        // $task = Task::find($id)->dele;
         $task = Task::where('id', $id)->first();
         $task->delete();
-        return redirect('/');
+        return $task;
+        // return redirect('/');
     }
 }
