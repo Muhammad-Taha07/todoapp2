@@ -22,7 +22,8 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="description">Task Description</label>
-                                <input class="form-control" id="description" placeholder="Enter Task here" name="description" required />
+                                <input class="form-control" id="description" placeholder="Enter Task here"
+                                    name="description" required />
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -37,8 +38,8 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col" style="width: 68%">Description</th>
+                    <th scope="col">ID</th>
+                    <th scope="col" style="width: 66%">Description</th>
                     <th scope="col">Actions</th>
                     <th scope="col">Delete Panel</th>
                 </tr>
@@ -52,7 +53,13 @@
                             style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
                             {{ $task->description }}</td>
                         <td>
-                            <button class="btn btn-dark markComplete" input="submit">Mark As Completed</button>
+                            <div id="divbtn">
+                            <form action="/tasks/{{ $task->id }}" method="POST">
+                                @method('PATCH')
+                                @csrf
+                                <button class="btn btn-dark" id="taskBtn1" input="submit">Mark As Completed</button>
+                            </form>
+                            </div>
                         </td>
                         <td>
                             <form action="/tasks/{{ $task->id }}" method="POST">
@@ -70,11 +77,9 @@
         <script>
             $('.markComplete').on('click', function(e) {
                 e.preventDefault();
-
                 console.log("Asdasdasd");
                 $(this).parent().prev().css('text-decoration', 'line-through')
             });
-
 
             $('#taskForm').on('submit', function(e) {
                 e.preventDefault();
@@ -89,8 +94,9 @@
                             '<td><form action="/tasks/' + response.id +
                             '" method="POST"><input type="hidden" name="_method" value="PATCH">{{ csrf_field() }}<button class="btn btn-dark" type="submit">Mark As Completed</button></form></td>' +
                             '<td><form action="/tasks/' + response.id +
-                            '" method="POST"><input type="hidden" name="_method" value="DELETE">{{ csrf_field() }}<button class="btn btn-danger" type="submit">Delete</button></form></td>' +
+                            '" method="POST"><input type="hidden" name="_method" value="DELETE">{{ csrf_field() }}<button class="btn btn-danger" type="submit">Delete Task</button></form></td>' +
                             '</tr>';
+
                         console.log(tableRow);
                         $("#taskTable").append(tableRow);
                         $('#taskModal').modal('hide');
@@ -101,10 +107,20 @@
                     //   }
                 });
             });
+            
+            //For hiding the button on Click
+
+            // $(document).ready(function() {
+            // $("#taskBtn1").click(function() {
+            // $("#divbtn").hide();
+            // // e.preventDefault(e);
+            // });
+
+            // });
         </script>
     @endsection
 
-
+    {{-- CARD VIEW FOR THE ABOVE WORK --}}
 
     {{-- <h1 style="margin-top: 30px;">To Do List Application</h1>
     <hr class="solid" style="border-top: 3px solid #bbb;">

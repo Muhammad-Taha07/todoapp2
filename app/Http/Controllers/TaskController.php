@@ -12,7 +12,6 @@ class TaskController extends Controller
 {
     protected $task;
 
-
     public function __construct(Task $task)
     {
         $this->task = $task;
@@ -28,7 +27,6 @@ class TaskController extends Controller
     {
         try {
             $tasks = $this->task->all();
-
 
             return response()->json([
                 "success" => true,
@@ -86,6 +84,7 @@ class TaskController extends Controller
 
 
     //updating function for editing & updating task
+
     public function update($id)
     {
         $task = Task::where('id', $id)->first();
@@ -94,6 +93,7 @@ class TaskController extends Controller
         // return dd($task); die dump to check if we're receiving data in array
         return redirect('/');
     }
+
     //Deleting function for
     public function delete($id)
     {
