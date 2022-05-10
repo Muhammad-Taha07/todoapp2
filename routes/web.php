@@ -22,8 +22,8 @@ Route::get('/tasks/create', 'TaskController@create');
 //Routing for adding a task
 Route::post('/tasks','TaskController@store')->name('createTasks');
 
-//Routing for Updating data via Patching
+//Routing for Updating data
 Route::get('/tasks/{id}', 'TaskController@update');
 
-//Routing for Deleting a task from index
+//Routing for Deleting a task from database
 Route::get('/tasks-delete/{id}', 'TaskController@delete');

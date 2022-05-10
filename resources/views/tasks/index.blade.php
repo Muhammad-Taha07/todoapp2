@@ -16,7 +16,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {{-- <form action="/tasks" method="POST"> --}}
+                    
                     <form id="taskForm" autocomplete="off">
                         @csrf
                         <div class="modal-body">
@@ -50,24 +50,27 @@
                     {{-- Completing task is being marked --}}
                     <tr id="tblRow-{{$task->id}}">
                         <th scope="row">{{ $task->id }}</th>
+
                         <td id='description-{{ $task->id }}'
                             style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
                             {{ $task->description }}
                         </td>
+
                         <td id="status-{{$task->id}}">
                             {{-- Status Change --}}
-                            <span class="badge {{$task->completed_at ? 'badge-success' : 'badge-danger'}}">{{$task->completed_at ? 'Completed' : 'Not Completed'}}</span>
+                        <span class="badge {{$task->completed_at ? 'badge-success' : 'badge-danger'}}">{{$task->completed_at ? 'Completed' : 'Not Completed'}}</span>
                         </td>
+
+                        {{-- Mark Task Complete Button --}}
                         <td><button class="btn btn-dark markBtn" id="{{$task->id}}">Mark As Completed</button></td>
-                        <td>
-                                <button class="btn btn-danger delBtn" id="{{$task->id}}" style="color: rgb(254, 254, 254);">DeleteTask</button>
-                        </td>
+                        {{-- Delete Button --}}
+                        <td><button class="btn btn-danger delBtn" id="{{$task->id}}" style="color: rgb(254, 254, 254);">DeleteTask</button></td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        {{-- Creating / Adding a task --}}
+    {{-- AJAX --}}
     <script>
         $(function () {
 
@@ -77,7 +80,7 @@
                 $(this).parent().prev().css('text-decoration', 'line-through')
             });
 
-            //status change with MARK COMPLETE Button
+            //AJAX : STATUS CHANGE
             $('.markBtn').on('click', function(e) {
                var id = $(this).attr('id');
             $.ajax({
@@ -92,7 +95,7 @@
             });
             });
 
-            //DEL BUTTON
+            //AJAX : DELETE BUTTON
             $('.delBtn').on('click', function(e) {
                var id = $(this).attr('id');
                console.log(id)
@@ -105,6 +108,7 @@
                 }
             });
             });
+            // AJAX : ADD TASK
             $('#taskForm').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -133,38 +137,3 @@
         });
     </script>
     @endsection
-
-    {{-- CARD VIEW FOR THE ABOVE WORK --}}
-
-    {{-- <h1 style="margin-top: 30px;">To Do List Application</h1>
-    <hr class="solid" style="border-top: 3px solid #bbb;">
-    <a href="/tasks/create" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 20px;">Add a new Task</a>
-
-    <hr class="solid" style="border-top: 3px solid #bbb;">
-
-    @foreach ($tasks as $task)
-
-    <div class="card @if ($task->isCompleted()) border-success @endif" style="margin-bottom: 20px;">
-    <div class="card-body">
-
-    <p style="font-size: 25px;">{{$task->description}}</p>
-    @if (!$task->isCompleted())
-    <form action="/tasks/{{$task->id}}" method="POST">
-        @method('PATCH')
-        @csrf
-        <button class="btn btn-dark" input="submit">Mark Complete</button>
-    </form>
-
-    @else
-
-    <form action="/tasks/{{$task->id}}" method="POST">
-        <h3 style="margin-top: 20px; color: green; text-shadow: 2px 2px 5px;">Task Completed</h1>
-        @method('DELETE')
-        @csrf
-        <button class="btn btn-danger" input="submit" style="color: rgb(234, 234, 234);">Delete Task</button>
-    </form>
-
-    @endif
-    </div>
-    </div>
-    @endforeach --}}

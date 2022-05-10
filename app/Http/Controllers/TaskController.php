@@ -22,7 +22,7 @@ class TaskController extends Controller
         $tasks = Task::all();
         return view('tasks.index', ['tasks' => $tasks,]);
     }
-//Showing all task
+//Showing all task via an API
     public function allTasks()
     {
         try {
@@ -44,11 +44,12 @@ class TaskController extends Controller
             ], 500);
         }
     }
+    //Viewing Task List
     public function create()
     {
         return view('tasks.create');
     }
-
+    //Inserting Tasks using API (DISABLED)
     public function storeData(Request $request)
     {
         try{
@@ -72,19 +73,15 @@ class TaskController extends Controller
             ],500);
         }
     }
-
+    //Inserting Task into Database
     public function store()
     {
-        // return request()->all();
         $task = Task::create([
             'description' => request('description'),
         ]);
         return $task;
     }
-
-
-    //updating function for editing & updating task
-
+    //Updating Task Status
     public function update($id)
     {
         $task = Task::where('id', $id)->first();
@@ -97,7 +94,6 @@ class TaskController extends Controller
         }
         $task->save();
         return $task;
-
     }
 
     //Deleting function for
@@ -106,6 +102,5 @@ class TaskController extends Controller
         $task = Task::where('id', $id)->first();
         $task->delete();
         return $task;
-        // return redirect('/');
     }
 }
