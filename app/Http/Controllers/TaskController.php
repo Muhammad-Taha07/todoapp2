@@ -21,34 +21,37 @@ class TaskController extends Controller
     {
         $tasks = Task::all();
         return view('tasks.index', ['tasks' => $tasks,]);
+        return redirect('/');
     }
 //Showing all task via an API
-    public function allTasks()
-    {
-        try {
-            $tasks = $this->task->all();
+    // public function allTasks()
+    // {
+    //     try {
+    //         $tasks = $this->task->all();
 
-            return response()->json([
-                "success" => true,
-                "status" => 200,
-                "message" => "Task fetched successfully",
-                "data" => $tasks
-            ], 200);
-            }
+    //         return response()->json([
+    //             "success" => true,
+    //             "status" => 200,
+    //             "message" => "Task fetched successfully",
+    //             "data" => $tasks
+    //         ], 200);
+    //         }
 
-        catch (Exception $exception) {
-            return response()->json([
-                "success" => false,
-                "status" => 500,
-                "message" => $exception
-            ], 500);
-        }
-    }
+    //     catch (Exception $exception) {
+    //         return response()->json([
+    //             "success" => false,
+    //             "status" => 500,
+    //             "message" => $exception
+    //         ], 500);
+    //     }
+    // }
+
     //Viewing Task List
     public function create()
     {
         return view('tasks.create');
     }
+    
     //Inserting Tasks using API (DISABLED)
     public function storeData(Request $request)
     {

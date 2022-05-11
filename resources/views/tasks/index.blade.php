@@ -5,6 +5,7 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#taskModal">Add a task</button>
         </div>
         <h1>Task List</h1>
+        <hr class="solid" style="border-top: 3px solid #bbb;">
         <!-- Modal Start -->
         <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -16,7 +17,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    
+
                     <form id="taskForm" autocomplete="off">
                         @csrf
                         <div class="modal-body">
