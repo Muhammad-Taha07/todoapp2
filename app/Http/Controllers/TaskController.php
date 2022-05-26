@@ -8,7 +8,6 @@ use Exception;
 
 class TaskController extends Controller
 //Dependency Injection
-
 {
     protected $task;
 
@@ -23,6 +22,7 @@ class TaskController extends Controller
         return view('tasks.index', ['tasks' => $tasks,]);
         return redirect('/');
     }
+
 //Showing all task via an API
     // public function allTasks()
     // {
@@ -51,7 +51,7 @@ class TaskController extends Controller
     {
         return view('tasks.create');
     }
-    
+
     //Inserting Tasks using API (DISABLED)
     public function storeData(Request $request)
     {
@@ -84,6 +84,7 @@ class TaskController extends Controller
         ]);
         return $task;
     }
+
     //Updating Task Status
     public function update($id)
     {
@@ -102,7 +103,7 @@ class TaskController extends Controller
     //Deleting function for
     public function delete($id)
     {
-        $task = Task::where('id', $id)->first();
+        $task = Task::where('id',$id)->first();
         $task->delete();
         return $task;
     }

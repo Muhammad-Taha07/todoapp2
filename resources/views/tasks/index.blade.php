@@ -2,6 +2,7 @@
     @section('content')
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end" style="margin-top: 10px;">
+            {{-- <a href="/graphql-playground" class="btn btn-primary">Switch to Graph QL</a> --}}
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#taskModal">Add a task</button>
         </div>
         <h1>Task List</h1>
@@ -17,7 +18,6 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
                     <form id="taskForm" autocomplete="off">
                         @csrf
                         <div class="modal-body">
@@ -52,20 +52,18 @@
                     <tr id="tblRow-{{$task->id}}">
                         <th scope="row">{{ $task->id }}</th>
 
-                        <td id='description-{{ $task->id }}'
-                            style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
-                            {{ $task->description }}
-                        </td>
-
-                        <td id="status-{{$task->id}}">
-                            {{-- Status Change --}}
-                        <span class="badge {{$task->completed_at ? 'badge-success' : 'badge-danger'}}">{{$task->completed_at ? 'Completed' : 'Not Completed'}}</span>
-                        </td>
-
-                        {{-- Mark Task Complete Button --}}
-                        <td><button class="btn btn-dark markBtn" id="{{$task->id}}">Mark As Completed</button></td>
-                        {{-- Delete Button --}}
-                        <td><button class="btn btn-danger delBtn" id="{{$task->id}}" style="color: rgb(254, 254, 254);">DeleteTask</button></td>
+                    <td id='description-{{ $task->id }}'
+                        style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
+                        {{ $task->description }}
+                    </td>
+                    <td id="status-{{$task->id}}">
+                        {{-- Status Change --}}
+                    <span class="badge {{$task->completed_at ? 'badge-success' : 'badge-danger'}}">{{$task->completed_at ? 'Completed' : 'Not Completed'}}</span>
+                    </td>
+                    {{-- Mark Task Complete Button --}}
+                    <td><button class="btn btn-dark markBtn" id="{{$task->id}}">Mark As Completed</button></td>
+                    {{-- Delete Button --}}
+                    <td><button class="btn btn-danger delBtn" id="{{$task->id}}" style="color: rgb(254, 254, 254);">DeleteTask</button></td>
                     </tr>
                 @endforeach
             </tbody>

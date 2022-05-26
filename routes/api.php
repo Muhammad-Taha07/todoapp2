@@ -19,9 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //Router for Homepage / Task Listing
-Route::get('/task','TaskController@allTasks');
+// Route::get('/task','TaskController@allTasks');
 
-Route::post('/task','TaskController@storeData');
+Route::post('/task1','TaskController@storeData');
 
 //For Storing data in database
 // Route::post('/task/','TaskController@storeData');

@@ -1,0 +1,48 @@
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+# Schema defined
+
+type Query
+{
+#   users: [User!]! @all, @paginate
+    # users: [User!]! @paginate
+    # user(id: ID @eq): User@find
+
+    # posts: [Post!]! @paginate
+    tasks: [Task!]! @paginate
+    tasks(id: ID @eq): Task@find
+}
+
+type Mutation
+{
+    # Creating A new User | LightHouse Mutation
+    createTask(description: String!) :Task! @create
+
+    # Updating an Existing User | LightHouse Mutation
+    updateTask(id: ID!, description: String) :Task! @update
+
+    # Deleting an Existing User | LightHouse Mutation
+    deleteTask(id: ID!) :Task! @delete
+
+    # Upsert | For Creating & Updating
+    upsertTask(id: ID, description: String!):Task! @upsert
+}
+
+# Targeted Fields/Records
+type User
+{
+    id:ID
+    name: String
+    email: String
+    address: String
+}
+
+type Post{
+    id: ID
+    title: String
+    content: String
+}
+
+type Task{
+    id: ID
+    description: String
+}
