@@ -8,7 +8,6 @@ use Exception;
 
 class TaskController extends Controller
 //Dependency Injection
-
 {
     protected $task;
 
@@ -21,34 +20,39 @@ class TaskController extends Controller
     {
         $tasks = Task::all();
         return view('tasks.index', ['tasks' => $tasks,]);
+        return redirect('/');
     }
-//Showing all task
-    public function allTasks()
-    {
-        try {
-            $tasks = $this->task->all();
 
-            return response()->json([
-                "success" => true,
-                "status" => 200,
-                "message" => "Task fetched successfully",
-                "data" => $tasks
-            ], 200);
-            }
+//Showing all task via an API
+    // public function allTasks()
+    // {
+    //     try {
+    //         $tasks = $this->task->all();
 
-        catch (Exception $exception) {
-            return response()->json([
-                "success" => false,
-                "status" => 500,
-                "message" => $exception
-            ], 500);
-        }
-    }
+    //         return response()->json([
+    //             "success" => true,
+    //             "status" => 200,
+    //             "message" => "Task fetched successfully",
+    //             "data" => $tasks
+    //         ], 200);
+    //         }
+
+    //     catch (Exception $exception) {
+    //         return response()->json([
+    //             "success" => false,
+    //             "status" => 500,
+    //             "message" => $exception
+    //         ], 500);
+    //     }
+    // }
+
+    //Viewing Task List
     public function create()
     {
         return view('tasks.create');
     }
 
+    //Inserting Tasks using API (DISABLED)
     public function storeData(Request $request)
     {
         try{
@@ -72,35 +76,35 @@ class TaskController extends Controller
             ],500);
         }
     }
-
+    //Inserting Task into Database
     public function store()
     {
-        // return request()->all();
         $task = Task::create([
             'description' => request('description'),
         ]);
         return $task;
     }
 
-
-    //updating function for editing & updating task
-
+    //Updating Task Status
     public function update($id)
     {
         $task = Task::where('id', $id)->first();
-        $task->completed_at = now();
+        if($task->completed_at)
+        {
+            $task->completed_at = null;
+        }
+        else{
+            $task->completed_at = now();
+        }
         $task->save();
-        // return dd($task); die dump to check if we're receiving data in array
-        return redirect('/');
+        return $task;
     }
 
     //Deleting function for
     public function delete($id)
     {
-
-        // $task = Task::find($id)->dele;
-        $task = Task::where('id', $id)->first();
+        $task = Task::where('id',$id)->first();
         $task->delete();
-        return redirect('/');
+        return $task;
     }
 }

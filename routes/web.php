@@ -23,7 +23,7 @@ Route::get('/tasks/create', 'TaskController@create');
 Route::post('/tasks','TaskController@store')->name('createTasks');
 
 //Routing for Updating data via Patching
-Route::PATCH('/tasks/{id}', 'TaskController@update');
+Route::get('/tasks/{id}', 'TaskController@update');
 
 //Routing for Deleting a task from index
-Route::DELETE('/tasks/{id}', 'TaskController@delete')->name('taskDel');
+Route::get('/tasks-delete/{id}', 'TaskController@delete')->name('taskDel');

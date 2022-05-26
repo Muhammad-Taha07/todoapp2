@@ -5,6 +5,7 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#taskModal">Add a task</button>
         </div>
         <h1>Task List</h1>
+        <hr class="solid" style="border-top: 3px solid #bbb;">
         <!-- Modal Start -->
         <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -16,7 +17,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {{-- <form action="/tasks" method="POST"> --}}
+
                     <form id="taskForm" autocomplete="off">
                         @csrf
                         <div class="modal-body">
@@ -40,6 +41,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col" style="width: 66%">Description</th>
+                    <th scope="col" style="width: 10%">Status</th>
                     <th scope="col">Actions</th>
                     <th scope="col">Delete Panel</th>
                 </tr>
@@ -47,42 +49,65 @@
             <tbody id="taskTable">
                 @foreach ($tasks as $task)
                     {{-- Completing task is being marked --}}
-                    <tr>
+                    <tr id="tblRow-{{$task->id}}">
                         <th scope="row">{{ $task->id }}</th>
-                        <td id='{{ $task->id }}-description'
-                            style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
-                            {{ $task->description }}</td>
-                        <td>
-                            <nav id="side-nav">
-                            <form action="/tasks/{{ $task->id }}" method="POST">
-                                @method('PATCH')
-                                @csrf
-                                <button class="btn btn-dark" id="taskBtn1" input="submit">Mark As Completed</button>
-                            </form>
-                        </nav>
-                        </td>
-                        <td>
-                            <form action="/tasks/{{ $task->id }}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn btn-danger" input="submit" style="color: rgb(254, 254, 254);">Delete
-                                    Task</button>
-                            </form>
-                        </td>
+
+                    <td id='description-{{ $task->id }}'
+                        style="text-decoration: {{ $task->completed_at == null ? 'none' : 'line-through' }}">
+                        {{ $task->description }}
+                    </td>
+                    <td id="status-{{$task->id}}">
+                        {{-- Status Change --}}
+                    <span class="badge {{$task->completed_at ? 'badge-success' : 'badge-danger'}}">{{$task->completed_at ? 'Completed' : 'Not Completed'}}</span>
+                    </td>
+                    {{-- Mark Task Complete Button --}}
+                    <td><button class="btn btn-dark markBtn" id="{{$task->id}}">Mark As Completed</button></td>
+                    {{-- Delete Button --}}
+                    <td><button class="btn btn-danger delBtn" id="{{$task->id}}" style="color: rgb(254, 254, 254);">DeleteTask</button></td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        {{-- Creating / Adding a task --}}
+    {{-- AJAX --}}
+    <script>
+        $(function () {
 
-        <script>
             $('.markComplete').on('click', function(e) {
                 e.preventDefault();
                 console.log("Asdasdasd");
                 $(this).parent().prev().css('text-decoration', 'line-through')
             });
 
+            //AJAX : STATUS CHANGE
+            $('.markBtn').on('click', function(e) {
+               var id = $(this).attr('id');
+            $.ajax({
+                url: "/tasks/"+id,
+                dataType:"json",
+                success: function(response) {
+                    console.log(response)
+                    var status = response.completed_at ? '<span class="badge badge-success">Completed</span>' : '<span class="badge badge-danger">Not Completed</span>';
+                    $('#status-'+id).html(status);
+                    $('#description-'+id).css('text-decoration', response.completed_at ? 'line-through' : 'none');
+                }
+            });
+            });
+
+            //AJAX : DELETE BUTTON
+            $('.delBtn').on('click', function(e) {
+               var id = $(this).attr('id');
+               console.log(id)
+            $.ajax({
+                url: "/tasks-delete/"+id,
+                dataType:"json",
+                success: function(response) {
+                    console.log(response)
+                    $('#tblRow-'+id).hide();
+                }
+            });
+            });
+            // AJAX : ADD TASK
             $('#taskForm').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -93,74 +118,21 @@
                         var tableRow = '<tr>' +
                             '<th scope="row">' + response.id + '</th>' +
                             '<td>' + response.description + '</td>' +
-                            '<td><form action="/tasks/' + response.id +
-                            '" method="POST"><input type="hidden" name="_method" value="PATCH">{{ csrf_field() }}<button class="btn btn-dark" type="submit">Mark As Completed</button></form></td>' +
+                            '<td>' +
+                            '<span class="badge badge-danger">Not Completed</span>'+
+                           '</td>'+
+                            '<td>'+
+                            '<button class="btn btn-dark markBtn" id='+response.id+'>Mark As Completed</button>'+
+                            '</td>'+
                             '<td><form action="/tasks/' + response.id +
                             '" method="POST"><input type="hidden" name="_method" value="DELETE">{{ csrf_field() }}<button class="btn btn-danger" type="submit">Delete Task</button></form></td>' +
                             '</tr>';
-
-                        console.log(tableRow);
                         $("#taskTable").append(tableRow);
                         $('#taskModal').modal('hide');
                         $('#description').val('');
                     }
-                    //   error: function(error){
-                    //     alert('Error');
-                    //   }
                 });
             });
-
-            //For hiding the button on Click
-
-            // $(document).ready(function() {
-            // $("#taskBtn1").click(function() {
-            // $("#divbtn").hide();
-            // // e.preventDefault(e);
-            // });
-
-            // });
-
-            $(document).ready(function(){
-                $('#taskBtn1').click(function(){
-                    $('#side-nav').hide();
-            });
-                });
-                //needs to Work here exactly.. (REQUIRED: Should mark TASK AS COMPLETED AT FRONTEND)
-            // })
-        </script>
+        });
+    </script>
     @endsection
-
-    {{-- CARD VIEW FOR THE ABOVE WORK --}}
-
-    {{-- <h1 style="margin-top: 30px;">To Do List Application</h1>
-    <hr class="solid" style="border-top: 3px solid #bbb;">
-    <a href="/tasks/create" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 20px;">Add a new Task</a>
-
-    <hr class="solid" style="border-top: 3px solid #bbb;">
-
-    @foreach ($tasks as $task)
-
-    <div class="card @if ($task->isCompleted()) border-success @endif" style="margin-bottom: 20px;">
-    <div class="card-body">
-
-    <p style="font-size: 25px;">{{$task->description}}</p>
-    @if (!$task->isCompleted())
-    <form action="/tasks/{{$task->id}}" method="POST">
-        @method('PATCH')
-        @csrf
-        <button class="btn btn-dark" input="submit">Mark Complete</button>
-    </form>
-
-    @else
-
-    <form action="/tasks/{{$task->id}}" method="POST">
-        <h3 style="margin-top: 20px; color: green; text-shadow: 2px 2px 5px;">Task Completed</h1>
-        @method('DELETE')
-        @csrf
-        <button class="btn btn-danger" input="submit" style="color: rgb(234, 234, 234);">Delete Task</button>
-    </form>
-
-    @endif
-    </div>
-    </div>
-    @endforeach --}}
